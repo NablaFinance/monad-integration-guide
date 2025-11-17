@@ -357,8 +357,7 @@ Apart from Solidity we have typescript and Rust implementations of the logic.
 
 ### ABI
 
-NablaPortal serves as general entrypoint for swaps, single and multihop alike (for the future case of multiple routers). 
-[`Portal`](https://docs.nabla.fi/developers/portal).
+[NablaPortal](https://docs.nabla.fi/developers/portal) serves as general entrypoint for swaps, single and multihop alike (for the future case of multiple routers). 
 
 ```solidity
 function swapExactTokensForTokens(
