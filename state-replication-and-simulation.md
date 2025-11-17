@@ -120,6 +120,7 @@ Each pool maintains its own reserve and liabilities, while an external oracle pr
 Integration needs to track both metadata (fixed parameters) and dynamic state (reserves, price, etc.).
 
 ### State Shape
+
 ```ts
 interface NablaPoolMeta {
   token: string;
@@ -153,21 +154,27 @@ interface Router {
 ```
 
 ### ABI
+
 Changes to the state are completely encapsulated by 2 events 
+
 ```solidity
 interface Pool {
   event ReserveUpdated(uint256 reserve, uint256 reserveWithSlippage, uint256 totalLiabilities);
 }
 ```
+
 Note that the emited values are absolute (not state deltas).
+
 ```solidity
 interface OracleAdapter {
   event PriceUpdated(address indexed token, uint64 publishTime, int64 price);
 }
 ```
+
 Oracle adapter is always a singleton and provides prices for all supported tokens.
 
 Fee changes can be followed via:
+
 ```solidity
 interface Pool {
   event SwapFeesSet(address indexed sender, uint256 lpFee, uint256 backstopFee, uint256 protocolFee);
@@ -175,6 +182,7 @@ interface Pool {
 ```
 
 ### Fetching Pool Metadata and initial state 
+
 ```solidity
 interface Pool {
   function swapFees() external view returns(uint256 lpFee, backstopFee, protocolFee);
@@ -190,8 +198,11 @@ interface SlippageCurve {
   function c() external view returns(uint256 c);
 }
 ```
+
 ### Ethers.js example 
+
 #### Pool intiialization
+
 ```ts
 import { ethers } from "ethers";
 
@@ -269,7 +280,9 @@ async function initializePools() {
   }
 }
 ```
+
 State change listeners
+
 ```ts
 
 const oracleAbi = [
@@ -321,7 +334,9 @@ function setupPoolStateEventListeners() {
   });
 }
 ```
+
 Full initialization
+
 ```ts
 async function main() {
   await discoverPools();       // From Section 1
@@ -334,17 +349,17 @@ main().catch(console.error);
 
 
 ## 3.Swap simulation
+
 Up to date states of two pools are enough for exact simulation of a swap. Swap logic involved relies, among other things, on Nabla slippage curve implementation. Due to the fact that said curve is not open source, examples of it's simulation will not be published. Please contact us directly whenever you are ready to implement the simulation logic.
-Aparft from Solidity we have typescript and Rust implementations of the logic. 
-
-=======================
-
+Apart from Solidity we have typescript and Rust implementations of the logic. 
 
 ## 4.Swap execution
 
 ### ABI
+
 NablaPortal serves as general entrypoint for swaps, single and multihop alike (for the future case of multiple routers). 
-   [`Portal`](https://docs.nabla.fi/developers/portal) .
+[`Portal`](https://docs.nabla.fi/developers/portal).
+
 ```solidity
 function swapExactTokensForTokens(
     uint256 _amountIn,
@@ -355,6 +370,7 @@ function swapExactTokensForTokens(
     uint256 _deadline
 ) external returns (uint256 amountOut_)
 ```
+
 For asingle hop swap is `_tokenPath = [tokenIn, tokenOut]` and `_routerPath = [routerAddress]`
 
 ### Ethers example
