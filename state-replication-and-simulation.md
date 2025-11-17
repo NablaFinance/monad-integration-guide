@@ -1,5 +1,5 @@
 
-# Integration Guide for Offchain Quoting
+# Integration Guide for Offchain state replication and simulation
 
 Two modes of integration are possible. Offchain state replication and simulation - described in this guide and [onchain quoting](onchain-quoting.md). While the later is trivial to implement, the former is better suited for Nabla's High Frequency Pricing engine and will result with greater volumes and revenues over time.
 
@@ -113,10 +113,8 @@ async function main() {
 main().catch(console.error);
 ```
 
-
-
-
 ## 2. Nabla State
+
 Nabla consists of single-sided liquidity pools gathered under a router.
 Each pool maintains its own reserve and liabilities, while an external oracle provides token prices.
 Integration needs to track both metadata (fixed parameters) and dynamic state (reserves, price, etc.).
