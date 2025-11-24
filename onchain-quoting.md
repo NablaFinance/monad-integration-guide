@@ -36,7 +36,7 @@ const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 
 const portalAbi = [
   "function getRouters() external view returns (address[])",
-  "function getRouterPools(address router) external view returns (address[])"
+  "function getRouterPools(address router) external view returns (address[] memory _assets, address[] memory _pools)"
 ];
 
 const portal = new ethers.Contract(
@@ -164,7 +164,7 @@ const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 // ---- ABIs ----
 const portalAbi = [
   "function getRouters() external view returns (address[])",
-  "function getRouterPools(address router) external view returns (address[])",
+  "function getRouterPools(address router) external view returns (address[] memory _assets, address[] memory _pools)"
   "function quoteSwapExactTokensForTokens(uint256,uint256,address[],address[],address,uint256,bytes[]) external returns (uint256)"
   "function swapExactTokensForTokens(uint256,uint256,address[],address[],address,uint256,bytes[]) external returns (uint256)"
 ];
