@@ -167,7 +167,7 @@ Note that the emited values are absolute (not state deltas).
 
 ```solidity
 interface OracleAdapter {
-  event PriceUpdated(address indexed token, uint64 publishTime, int64 price);
+  function getAssetPrice(address _assetAddress) public view returns(uint256 price_);
 }
 ```
 
@@ -286,7 +286,7 @@ State change listeners
 ```ts
 
 const oracleAbi = [
-  "event PriceUpdated(address indexed token, uint64 publishTime, int64 price)" 
+  "function getAssetPrice(address _assetAddress) public view returns(uint256 price_)" 
 ];
 const poolAbi = [
   "event ReserveUpdated(uint256 reserve, uint256 reserveWithSlippage, uint256 totalLiabilities)"
@@ -321,17 +321,16 @@ function setupPoolStateEventListeners() {
     }
   }
 
-  // --- Oracle PriceUpdated (global) ---
-  oracle.on("PriceUpdated", (token, publishTime, price) => {
+  // --- Oracle prices  (global) ---
+  const blockTime = 400;
+  setInterval(() => {
     for (const router of Object.values(routers)) {
+   
       for (const pool of router.pools) {
-        if (pool.asset.toLowerCase() === token.toLowerCase() && pool.state) {
-          pool.state.price = BigInt(price);
-          console.log(`Price updated for ${token} (pool ${pool.address}): ${price}`);
-        }
+        pool.state.price = await oracle.getAssetPrice(pool.asset)
       }
     }
-  });
+  }, blockTime);
 }
 ```
 
